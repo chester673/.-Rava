@@ -17,3 +17,11 @@ jobs:
         run: npm install
       - name: Validate server syntax
         run: node --check server.js
+      - name: Smoke test server endpoints
+        run: |
+          npm start > /tmp/rava-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
+          for i in $(seq 1 15); do if curl -fsS http://127.0.0.1:3000/api/status > /tmp/rava-status.json; then break; fi; sleep 1; done
+          node -e "const s=require('/tmp/rava-status.json'); if(s.status!=='ok') process.exit(1); console.log('RAVA API smoke test passed')"
+          curl -fsS http://127.0.0.1:3000/ | grep -q 'RAVA'
