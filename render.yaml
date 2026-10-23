@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: rava-server
+    runtime:  ode
+    plan: free
+    buildCommands:  pm install
+    startCommand:  pm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CAMERA_STREAM_URL
+        sync: false
