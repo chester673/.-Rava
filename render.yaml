@@ -3,7 +3,7 @@ services:
     name: rava-server
     runtime:  ode
     plan: free
-    buildCommands:  pm install
+    buildCommand:  pm install
     startCommand:  pm start
     envVars:
       - key: NODE_ENV
